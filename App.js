@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Modal } from 'react-native';
-import { Calendar, MapPin, Clock, DollarSign, BookOpen, Wallet, Home, List, ChevronRight, X } from 'lucide-react';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, StatusBar, ImageBackground } from 'react-native';
+import { Calendar, MapPin, Clock, BookOpen, Wallet, Home, List, ChevronRight, Phone, Star, Shield, Users, Globe } from 'lucide-react-native';
 
-// Псевдоданные туров
+// --- ДАННЫЕ (Оставляем как есть) ---
 const toursData = [
   {
     id: '1',
@@ -84,63 +84,32 @@ const toursData = [
   }
 ];
 
-// База знаний
 const knowledgeData = [
   {
     id: 'k1',
     title: 'Что такое Умра',
     category: 'Основы',
-    content: `Умра — это малое паломничество в Мекку, которое можно совершать в любое время года.
-
-Основные обряды Умры:
-• Ихрам — состояние ритуальной чистоты
-• Таваф — семикратный обход Каабы
-• Саи — хождение между холмами Сафа и Марва
-• Бритье или укорачивание волос
-
-Умра не заменяет Хадж, но является богоугодным делом, очищающим от грехов.`
+    content: `Умра — это малое паломничество в Мекку, которое можно совершать в любое время года.\n\nОсновные обряды Умры:\n• Ихрам — состояние ритуальной чистоты\n• Таваф — семикратный обход Каабы\n• Саи — хождение между холмами Сафа и Марва\n• Бритье или укорачивание волос\n\nУмра не заменяет Хадж, но является богоугодным делом, очищающим от грехов.`
   },
   {
     id: 'k2',
     title: 'Разница между Хадж и Умра',
     category: 'Основы',
-    content: `Хадж — обязательное паломничество, один из пяти столпов Ислама.
-Умра — желательное паломничество.
-
-Главные отличия:
-• Хадж совершается в определенное время (8-13 Зуль-хиджа)
-• Умра можно совершать круглый год
-• Хадж включает больше обрядов (стояние на Арафате, Мина)
-• Хадж обязателен раз в жизни для способных
-• Умра — добровольное поклонение`
+    content: `Хадж — обязательное паломничество, один из пяти столпов Ислама.\nУмра — желательное паломничество.\n\nГлавные отличия:\n• Хадж совершается в определенное время (8-13 Зуль-хиджа)\n• Умра можно совершать круглый год\n• Хадж включает больше обрядов (стояние на Арафате, Мина)\n• Хадж обязателен раз в жизни для способных\n• Умра — добровольное поклонение`
   },
   {
     id: 'k3',
     title: 'Требования для паломничества',
     category: 'Подготовка',
-    content: `Для совершения паломничества необходимо:
-
-Духовная подготовка:
-• Искреннее намерение (ният)
-• Покаяние в грехах
-• Изучение обрядов
-
-Материальная подготовка:
-• Финансовая возможность
-• Разрешение долгов
-• Обеспечение семьи
-
-Документы:
-• Действующий загранпаспорт
-• Виза
-• Прививки (менингит, COVID-19)
-• Для женщин: сопровождение махрама`
+    content: `Для совершения паломничества необходимо:\n\nДуховная подготовка:\n• Искреннее намерение (ният)\n• Покаяние в грехах\n• Изучение обрядов\n\nМатериальная подготовка:\n• Финансовая возможность\n• Разрешение долгов\n• Обеспечение семьи\n\nДокументы:\n• Действующий загранпаспорт\n• Виза\n• Прививки (менингит, COVID-19)\n• Для женщин: сопровождение махрама`
   }
 ];
 
-// Компонент экрана
-const Screen = ({ children, title, onBack }) => (
-  <SafeAreaView style={styles.screen}>
+// --- КОМПОНЕНТЫ ---
+
+const Screen = ({ children, title, onBack, style }) => (
+  <SafeAreaView style={[styles.screen, style]}>
+    <StatusBar barStyle="dark-content" backgroundColor="#fff" />
     {title && (
       <View style={styles.header}>
         {onBack && (
@@ -151,28 +120,234 @@ const Screen = ({ children, title, onBack }) => (
         <Text style={styles.headerTitle}>{title}</Text>
       </View>
     )}
-    <ScrollView style={styles.scrollView}>{children}</ScrollView>
+    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      {children}
+    </ScrollView>
   </SafeAreaView>
 );
 
-// Главный экран
-const HomeScreen = ({ onNavigate }) => {
+// НОВЫЙ ЭКРАН: Главная страница (Визитка)
+const LandingScreen = ({ onNavigate }) => {
+  return (
+    <SafeAreaView style={styles.landingContainer}>
+      <StatusBar barStyle="light-content" backgroundColor="#047857" />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        
+        {/* 1. Hero-секция: Заголовок и приветствие */}
+        <View style={styles.heroSection}>
+          <View style={styles.heroContent}>
+            <Text style={styles.heroGreeting}>Ассаламу алейкум!</Text>
+            <Text style={styles.heroTitle}>Islamic Tours</Text>
+            <Text style={styles.heroSubtitle}>Ваш надежный проводник{"\n"}к святым местам</Text>
+            
+            <TouchableOpacity 
+              style={styles.heroButton}
+              onPress={() => onNavigate('catalog')}
+            >
+              <Text style={styles.heroButtonText}>Подобрать тур</Text>
+              <ChevronRight size={20} color="#047857" />
+            </TouchableOpacity>
+          </View>
+          {/* Декоративные круги */}
+          <View style={styles.circle1} />
+          <View style={styles.circle2} />
+        </View>
+
+        {/* 2. Статистика / Преимущества */}
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Shield size={28} color="#047857" />
+            <Text style={styles.statValue}>100%</Text>
+            <Text style={styles.statLabel}>Халяль</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Users size={28} color="#047857" />
+            <Text style={styles.statValue}>5000+</Text>
+            <Text style={styles.statLabel}>Паломников</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Star size={28} color="#047857" />
+            <Text style={styles.statValue}>5 лет</Text>
+            <Text style={styles.statLabel}>Опыта</Text>
+          </View>
+        </View>
+
+        {/* 3. Основные направления (Крупное меню) */}
+        <View style={styles.section}>
+          <Text style={styles.landingSectionTitle}>Наши направления</Text>
+          
+          <View style={styles.servicesGrid}>
+            <TouchableOpacity 
+              style={[styles.serviceCard, { backgroundColor: '#ecfdf5' }]}
+              onPress={() => onNavigate('tours', { filter: 'umrah' })}
+            >
+              <Globe size={32} color="#047857" />
+              <Text style={styles.serviceTitle}>Умра</Text>
+              <Text style={styles.serviceDesc}>Малое паломничество</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.serviceCard, { backgroundColor: '#fffbeb' }]}
+              onPress={() => onNavigate('tours', { filter: 'hajj' })}
+            >
+              <View style={styles.iconBoxGold}>
+                <MapPin size={32} color="#b45309" />
+              </View>
+              <Text style={[styles.serviceTitle, { color: '#b45309' }]}>Хадж</Text>
+              <Text style={styles.serviceDesc}>Обязательное паломничество</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.serviceCard, { backgroundColor: '#eff6ff' }]}
+              onPress={() => onNavigate('tours', { filter: 'ziyarat' })}
+            >
+              <BookOpen size={32} color="#1d4ed8" />
+              <Text style={[styles.serviceTitle, { color: '#1d4ed8' }]}>Зиярат</Text>
+              <Text style={styles.serviceDesc}>Посещение святынь</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={[styles.serviceCard, { backgroundColor: '#faf5ff' }]}
+              onPress={() => onNavigate('tours', { filter: 'cultural' })}
+            >
+              <List size={32} color="#7e22ce" />
+              <Text style={[styles.serviceTitle, { color: '#7e22ce' }]}>Туризм</Text>
+              <Text style={styles.serviceDesc}>Халяль отдых</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* 4. Блок "О нас" / Призыв */}
+        <View style={styles.aboutSection}>
+          <Text style={styles.aboutTitle}>Почему выбирают нас?</Text>
+          <Text style={styles.aboutText}>
+            Мы берем на себя все заботы: от оформления визы до проживания в отелях рядом с Харамом. 
+            С нами ваше паломничество будет комфортным и принятым Всевышним.
+          </Text>
+          <TouchableOpacity 
+            style={styles.outlineButton}
+            onPress={() => onNavigate('knowledge')}
+          >
+            <Text style={styles.outlineButtonText}>Узнать больше о подготовке</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* 5. Контакты */}
+        <View style={styles.contactSection}>
+          <Text style={styles.contactTitle}>Свяжитесь с нами</Text>
+          <View style={styles.contactRow}>
+            <Phone size={20} color="#fff" />
+            <Text style={styles.contactText}>+7 (777) 123-45-67</Text>
+          </View>
+          <View style={styles.contactRow}>
+            <MapPin size={20} color="#fff" />
+            <Text style={styles.contactText}>г. Алматы, пр. Абая 150</Text>
+          </View>
+        </View>
+        
+        {/* Отступ для нижнего меню */}
+        <View style={{ height: 80 }} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+// Экран Каталога (Бывший HomeScreen)
+const CatalogScreen = ({ onNavigate }) => {
   const upcomingTours = toursData
     .filter(tour => new Date(tour.startDate) > new Date())
     .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
     .slice(0, 3);
 
   return (
-    <Screen>
+    <Screen title="Каталог туров">
       <View style={styles.container}>
-        <View style={styles.welcomeSection}>
-          <Text style={styles.greeting}>Ассаламу алейкум!</Text>
-          <Text style={styles.subtitle}>Ваш путь к святым местам</Text>
+        <View style={styles.section}>
+          <View style={styles.sectionHeaderRow}>
+            <Text style={styles.sectionTitle}>Ближайшие вылеты</Text>
+            <TouchableOpacity onPress={() => onNavigate('tours')}>
+              <Text style={styles.seeAllText}>Все</Text>
+            </TouchableOpacity>
+          </View>
+          
+          {upcomingTours.map(tour => (
+            <TouchableOpacity
+              key={tour.id}
+              style={styles.tourCard}
+              onPress={() => onNavigate('tour', tour)}
+            >
+              <View style={styles.tourCardHeader}>
+                <Text style={styles.tourTitle}>{tour.title}</Text>
+                <Text style={styles.tourPrice}>{(tour.price / 1000).toFixed(0)}k ₸</Text>
+              </View>
+              <View style={styles.tourInfoRow}>
+                <View style={styles.tourInfo}>
+                  <MapPin size={14} color="#666" />
+                  <Text style={styles.tourInfoText}>{tour.city}</Text>
+                </View>
+                <View style={styles.tourInfo}>
+                  <Calendar size={14} color="#666" />
+                  <Text style={styles.tourInfoText}>
+                    {new Date(tour.startDate).toLocaleDateString('ru-RU')}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Ближайшие туры</Text>
-          {upcomingTours.map(tour => (
+        <View style={styles.promoBanner}>
+          <Text style={styles.promoTitle}>Копите на Хадж?</Text>
+          <Text style={styles.promoText}>Откройте виртуальный кошелек и отслеживайте накопления</Text>
+          <TouchableOpacity 
+            style={styles.promoButton}
+            onPress={() => onNavigate('wallet')}
+          >
+            <Text style={styles.promoButtonText}>Перейти в кошелёк</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Screen>
+  );
+};
+
+const ToursScreen = ({ onNavigate, onBack, initialFilter = 'all' }) => {
+  const [filter, setFilter] = useState(initialFilter);
+  
+  // Если пришли с параметром, устанавливаем его (один раз)
+  useEffect(() => {
+    if (initialFilter) setFilter(initialFilter);
+  }, [initialFilter]);
+
+  const filteredTours = filter === 'all' 
+    ? toursData 
+    : toursData.filter(t => t.type === filter);
+
+  return (
+    <Screen title="Все туры" onBack={onBack}>
+      <View style={styles.container}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll}>
+          <View style={styles.filterContainer}>
+            {['all', 'umrah', 'hajj', 'ziyarat'].map((type) => (
+              <TouchableOpacity
+                key={type}
+                style={[styles.filterButton, filter === type && styles.filterButtonActive]}
+                onPress={() => setFilter(type)}
+              >
+                <Text style={[styles.filterButtonText, filter === type && styles.filterButtonTextActive]}>
+                  {type === 'all' ? 'Все' : type === 'umrah' ? 'Умра' : type === 'hajj' ? 'Хадж' : 'Зиярат'}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+
+        {filteredTours.length === 0 ? (
+          <Text style={styles.emptyText}>В данной категории пока нет туров.</Text>
+        ) : (
+          filteredTours.map(tour => (
             <TouchableOpacity
               key={tour.id}
               style={styles.tourCard}
@@ -192,116 +367,18 @@ const HomeScreen = ({ onNavigate }) => {
                   {new Date(tour.startDate).toLocaleDateString('ru-RU')}
                 </Text>
               </View>
+              <View style={styles.tourInfo}>
+                <Clock size={14} color="#666" />
+                <Text style={styles.tourInfoText}>{tour.durationDays} дней</Text>
+              </View>
             </TouchableOpacity>
-          ))}
-        </View>
-
-        <View style={styles.quickActions}>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => onNavigate('tours')}
-          >
-            <List size={24} color="#047857" />
-            <Text style={styles.actionButtonText}>Все туры</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => onNavigate('knowledge')}
-          >
-            <BookOpen size={24} color="#047857" />
-            <Text style={styles.actionButtonText}>База знаний</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => onNavigate('wallet')}
-          >
-            <Wallet size={24} color="#047857" />
-            <Text style={styles.actionButtonText}>Кошелёк</Text>
-          </TouchableOpacity>
-        </View>
+          ))
+        )}
       </View>
     </Screen>
   );
 };
 
-// Список туров
-const ToursScreen = ({ onNavigate, onBack }) => {
-  const [filter, setFilter] = useState('all');
-  
-  const filteredTours = filter === 'all' 
-    ? toursData 
-    : toursData.filter(t => t.type === filter);
-
-  return (
-    <Screen title="Все туры" onBack={onBack}>
-      <View style={styles.container}>
-        <View style={styles.filterContainer}>
-          <TouchableOpacity
-            style={[styles.filterButton, filter === 'all' && styles.filterButtonActive]}
-            onPress={() => setFilter('all')}
-          >
-            <Text style={[styles.filterButtonText, filter === 'all' && styles.filterButtonTextActive]}>
-              Все
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, filter === 'umrah' && styles.filterButtonActive]}
-            onPress={() => setFilter('umrah')}
-          >
-            <Text style={[styles.filterButtonText, filter === 'umrah' && styles.filterButtonTextActive]}>
-              Умра
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, filter === 'hajj' && styles.filterButtonActive]}
-            onPress={() => setFilter('hajj')}
-          >
-            <Text style={[styles.filterButtonText, filter === 'hajj' && styles.filterButtonTextActive]}>
-              Хадж
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, filter === 'ziyarat' && styles.filterButtonActive]}
-            onPress={() => setFilter('ziyarat')}
-          >
-            <Text style={[styles.filterButtonText, filter === 'ziyarat' && styles.filterButtonTextActive]}>
-              Зиярат
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {filteredTours.map(tour => (
-          <TouchableOpacity
-            key={tour.id}
-            style={styles.tourCard}
-            onPress={() => onNavigate('tour', tour)}
-          >
-            <View style={styles.tourCardHeader}>
-              <Text style={styles.tourTitle}>{tour.title}</Text>
-              <Text style={styles.tourPrice}>{(tour.price / 1000).toFixed(0)}k ₸</Text>
-            </View>
-            <View style={styles.tourInfo}>
-              <MapPin size={14} color="#666" />
-              <Text style={styles.tourInfoText}>{tour.city}</Text>
-            </View>
-            <View style={styles.tourInfo}>
-              <Calendar size={14} color="#666" />
-              <Text style={styles.tourInfoText}>
-                {new Date(tour.startDate).toLocaleDateString('ru-RU')}
-              </Text>
-            </View>
-            <View style={styles.tourInfo}>
-              <Clock size={14} color="#666" />
-              <Text style={styles.tourInfoText}>{tour.durationDays} дней</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </Screen>
-  );
-};
-
-// Детальный экран тура
 const TourDetailScreen = ({ tour, onBack }) => {
   return (
     <Screen title={tour.title} onBack={onBack}>
@@ -358,7 +435,6 @@ const TourDetailScreen = ({ tour, onBack }) => {
   );
 };
 
-// База знаний
 const KnowledgeScreen = ({ onNavigate, onBack }) => {
   return (
     <Screen title="База знаний" onBack={onBack}>
@@ -384,7 +460,6 @@ const KnowledgeScreen = ({ onNavigate, onBack }) => {
   );
 };
 
-// Статья базы знаний
 const ArticleScreen = ({ article, onBack }) => {
   return (
     <Screen title={article.title} onBack={onBack}>
@@ -398,7 +473,6 @@ const ArticleScreen = ({ article, onBack }) => {
   );
 };
 
-// Виртуальный кошелёк
 const WalletScreen = ({ onBack }) => {
   const [wallet, setWallet] = useState({
     balance: 350000,
@@ -410,38 +484,6 @@ const WalletScreen = ({ onBack }) => {
       { date: '2025-11-01', amount: 50000, type: 'auto' }
     ]
   });
-
-  useEffect(() => {
-    // Проверка автопополнения
-    const checkAutoTopUp = () => {
-      const now = new Date();
-      const nextTopUp = new Date(wallet.nextTopUpDate);
-      
-      if (now >= nextTopUp) {
-        const newBalance = wallet.balance + wallet.monthlyTopUp;
-        const newHistory = [
-          {
-            date: now.toISOString().split('T')[0],
-            amount: wallet.monthlyTopUp,
-            type: 'auto'
-          },
-          ...wallet.history
-        ];
-        
-        const newNextDate = new Date(nextTopUp);
-        newNextDate.setMonth(newNextDate.getMonth() + 1);
-        
-        setWallet({
-          ...wallet,
-          balance: newBalance,
-          nextTopUpDate: newNextDate.toISOString().split('T')[0],
-          history: newHistory
-        });
-      }
-    };
-    
-    checkAutoTopUp();
-  }, []);
 
   return (
     <Screen title="Виртуальный кошелёк" onBack={onBack}>
@@ -489,73 +531,95 @@ const WalletScreen = ({ onBack }) => {
   );
 };
 
-// Главный компонент приложения
+// --- ГЛАВНЫЙ КОМПОНЕНТ ---
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('home');
+  const [currentScreen, setCurrentScreen] = useState('landing'); // Начинаем с Landing
   const [selectedItem, setSelectedItem] = useState(null);
+  const [routeParams, setRouteParams] = useState({});
 
   const navigate = (screen, item = null) => {
+    // Если передали объект вторым параметром, проверяем, это параметры или данные
+    if (item && item.filter) {
+        setRouteParams(item);
+        setSelectedItem(null);
+    } else {
+        setSelectedItem(item);
+        setRouteParams({});
+    }
     setCurrentScreen(screen);
-    setSelectedItem(item);
   };
 
   const goBack = () => {
-    setCurrentScreen('home');
+    // Логика кнопки "Назад"
+    if (currentScreen === 'tours' || currentScreen === 'catalog') {
+      setCurrentScreen('landing');
+    } else if (currentScreen === 'tour') {
+      setCurrentScreen('catalog');
+    } else if (currentScreen === 'article') {
+      setCurrentScreen('knowledge');
+    } else {
+      setCurrentScreen('landing');
+    }
     setSelectedItem(null);
+    setRouteParams({});
   };
 
   return (
     <View style={styles.app}>
-      {currentScreen === 'home' && <HomeScreen onNavigate={navigate} />}
-      {currentScreen === 'tours' && <ToursScreen onNavigate={navigate} onBack={goBack} />}
+      {currentScreen === 'landing' && <LandingScreen onNavigate={navigate} />}
+      {currentScreen === 'catalog' && <CatalogScreen onNavigate={navigate} />}
+      {currentScreen === 'tours' && <ToursScreen onNavigate={navigate} onBack={goBack} initialFilter={routeParams.filter} />}
       {currentScreen === 'tour' && <TourDetailScreen tour={selectedItem} onBack={goBack} />}
       {currentScreen === 'knowledge' && <KnowledgeScreen onNavigate={navigate} onBack={goBack} />}
       {currentScreen === 'article' && <ArticleScreen article={selectedItem} onBack={goBack} />}
       {currentScreen === 'wallet' && <WalletScreen onBack={goBack} />}
 
-      {/* Нижняя навигация */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => navigate('home')}
-        >
-          <Home size={24} color={currentScreen === 'home' ? '#047857' : '#999'} />
-          <Text style={[styles.navButtonText, currentScreen === 'home' && styles.navButtonTextActive]}>
-            Главная
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => navigate('tours')}
-        >
-          <List size={24} color={currentScreen === 'tours' ? '#047857' : '#999'} />
-          <Text style={[styles.navButtonText, currentScreen === 'tours' && styles.navButtonTextActive]}>
-            Туры
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => navigate('knowledge')}
-        >
-          <BookOpen size={24} color={currentScreen === 'knowledge' ? '#047857' : '#999'} />
-          <Text style={[styles.navButtonText, currentScreen === 'knowledge' && styles.navButtonTextActive]}>
-            Знания
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => navigate('wallet')}
-        >
-          <Wallet size={24} color={currentScreen === 'wallet' ? '#047857' : '#999'} />
-          <Text style={[styles.navButtonText, currentScreen === 'wallet' && styles.navButtonTextActive]}>
-            Кошелёк
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {/* Нижняя навигация (скрыта на Landing) */}
+      {currentScreen !== 'landing' && (
+        <View style={styles.bottomNav}>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => navigate('landing')}
+          >
+            <Home size={24} color={currentScreen === 'landing' ? '#047857' : '#999'} />
+            <Text style={[styles.navButtonText, currentScreen === 'landing' && styles.navButtonTextActive]}>
+              Главная
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => navigate('catalog')}
+          >
+            <List size={24} color={(currentScreen === 'catalog' || currentScreen === 'tours') ? '#047857' : '#999'} />
+            <Text style={[styles.navButtonText, (currentScreen === 'catalog' || currentScreen === 'tours') && styles.navButtonTextActive]}>
+              Туры
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => navigate('knowledge')}
+          >
+            <BookOpen size={24} color={currentScreen === 'knowledge' ? '#047857' : '#999'} />
+            <Text style={[styles.navButtonText, currentScreen === 'knowledge' && styles.navButtonTextActive]}>
+              Знания
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => navigate('wallet')}
+          >
+            <Wallet size={24} color={currentScreen === 'wallet' ? '#047857' : '#999'} />
+            <Text style={[styles.navButtonText, currentScreen === 'wallet' && styles.navButtonTextActive]}>
+              Кошелёк
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 }
 
+// --- СТИЛИ ---
 const styles = StyleSheet.create({
   app: {
     flex: 1,
@@ -565,54 +629,151 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f9fa',
   },
+  landingContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   header: {
     backgroundColor: '#fff',
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   backButton: {
-    marginBottom: 8,
+    marginRight: 16,
   },
   backButtonText: {
     color: '#047857',
     fontSize: 16,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
     color: '#1f2937',
   },
   scrollView: {
     flex: 1,
-    marginBottom: 70,
+    marginBottom: 70, // Отступ для нижней навигации
   },
   container: {
     padding: 16,
   },
-  welcomeSection: {
-    backgroundColor: '#fff',
-    padding: 24,
-    borderRadius: 16,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+  // HERO SECTION STYLES
+  heroSection: {
+    backgroundColor: '#047857',
+    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingBottom: 60,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    position: 'relative',
+    overflow: 'hidden',
   },
-  greeting: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#047857',
+  heroContent: {
+    zIndex: 2,
+  },
+  heroGreeting: {
+    color: '#a7f3d0',
+    fontSize: 16,
+    marginBottom: 8,
+    fontWeight: '600',
+  },
+  heroTitle: {
+    color: '#fff',
+    fontSize: 36,
+    fontWeight: '800',
     marginBottom: 8,
   },
-  subtitle: {
+  heroSubtitle: {
+    color: '#e5e7eb',
+    fontSize: 18,
+    lineHeight: 26,
+    marginBottom: 24,
+  },
+  heroButton: {
+    backgroundColor: '#fff',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 50,
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  heroButtonText: {
+    color: '#047857',
+    fontWeight: '700',
     fontSize: 16,
+  },
+  circle1: {
+    position: 'absolute',
+    top: -50,
+    right: -50,
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  circle2: {
+    position: 'absolute',
+    bottom: -20,
+    left: -20,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+  },
+  
+  // STATS STYLES
+  statsContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    marginTop: -30,
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
+    zIndex: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1f2937',
+    marginTop: 4,
+  },
+  statLabel: {
+    fontSize: 12,
     color: '#6b7280',
   },
+  statDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: '#e5e7eb',
+  },
+
+  // SECTIONS
   section: {
     marginBottom: 24,
+    paddingHorizontal: 16,
+    paddingTop: 24,
+  },
+  landingSectionTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#1f2937',
+    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 20,
@@ -620,6 +781,101 @@ const styles = StyleSheet.create({
     color: '#1f2937',
     marginBottom: 12,
   },
+  sectionHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  seeAllText: {
+    color: '#047857',
+    fontWeight: '600',
+  },
+  
+  // SERVICE GRID
+  servicesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  serviceCard: {
+    width: '48%',
+    padding: 16,
+    borderRadius: 16,
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  serviceTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginTop: 12,
+    color: '#047857',
+  },
+  serviceDesc: {
+    fontSize: 12,
+    color: '#6b7280',
+    marginTop: 4,
+  },
+  
+  // ABOUT SECTION
+  aboutSection: {
+    margin: 16,
+    padding: 20,
+    backgroundColor: '#f8fafc',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+  },
+  aboutTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1f2937',
+    marginBottom: 8,
+  },
+  aboutText: {
+    fontSize: 14,
+    color: '#4b5563',
+    lineHeight: 22,
+    marginBottom: 16,
+  },
+  outlineButton: {
+    borderWidth: 1,
+    borderColor: '#047857',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  outlineButtonText: {
+    color: '#047857',
+    fontWeight: '600',
+  },
+
+  // CONTACT SECTION
+  contactSection: {
+    backgroundColor: '#1f2937',
+    padding: 24,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  contactTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 16,
+  },
+  contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    gap: 12,
+  },
+  contactText: {
+    color: '#d1d5db',
+    fontSize: 16,
+  },
+
+  // CARDS STYLES
   tourCard: {
     backgroundColor: '#fff',
     padding: 16,
@@ -630,6 +886,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    borderWidth: 1,
+    borderColor: '#f3f4f6',
   },
   tourCardHeader: {
     flexDirection: 'row',
@@ -648,44 +906,60 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#047857',
   },
+  tourInfoRow: {
+    flexDirection: 'row',
+    gap: 16,
+  },
   tourInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 6,
+    marginRight: 12,
   },
   tourInfoText: {
-    marginLeft: 8,
+    marginLeft: 6,
     fontSize: 14,
     color: '#6b7280',
   },
-  quickActions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
+  
+  // PROMO BANNER
+  promoBanner: {
+    backgroundColor: '#064e3b',
+    padding: 20,
+    borderRadius: 16,
+    marginTop: 10,
   },
-  actionButton: {
-    flex: 1,
-    minWidth: '30%',
-    backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+  promoTitle: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 4,
   },
-  actionButtonText: {
-    marginTop: 8,
+  promoText: {
+    color: '#a7f3d0',
     fontSize: 14,
-    color: '#1f2937',
-    textAlign: 'center',
+    marginBottom: 16,
+  },
+  promoButton: {
+    backgroundColor: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  promoButtonText: {
+    color: '#064e3b',
+    fontWeight: '600',
+  },
+
+  // FILTERS
+  filterScroll: {
+    marginBottom: 16,
   },
   filterContainer: {
     flexDirection: 'row',
-    marginBottom: 16,
     gap: 8,
+    paddingHorizontal: 4,
   },
   filterButton: {
     paddingHorizontal: 16,
@@ -706,6 +980,13 @@ const styles = StyleSheet.create({
   filterButtonTextActive: {
     color: '#fff',
   },
+  emptyText: {
+    textAlign: 'center',
+    color: '#999',
+    marginTop: 40,
+  },
+
+  // DETAILS
   tourDetailHeader: {
     backgroundColor: '#fff',
     padding: 20,
@@ -772,6 +1053,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#fff',
   },
+
+  // KNOWLEDGE & WALLET
   knowledgeCard: {
     backgroundColor: '#fff',
     padding: 16,
@@ -876,6 +1159,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#047857',
   },
+  
+  // NAV
   bottomNav: {
     position: 'absolute',
     bottom: 0,
